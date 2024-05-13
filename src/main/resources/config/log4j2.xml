@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" monitorInterval="300">
+	
+	<properties> 
+		<property name="logDir" value="D:/weblogs/SpringBoot" />
+		<property name="logLevel" value="INFO" />
+		<property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5level [%file:%line] %msg%n" />
+	</properties>
+
+	<Appenders>
+
+		<!-- ########################==CONSOLE_Log==######################### -->
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${pattern}" />
+		</Console>
+
+		<!-- ########################==default_Log==######################### -->
+		<RollingRandomAccessFile name="default" fileName="${logDir}/default.log" filePattern="${logDir}/default-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="${pattern}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="7" />
+		</RollingRandomAccessFile>
+		
+		<!-- ########################==infolog_Log==######################### -->
+		<RollingRandomAccessFile name="infolog" fileName="${logDir}/infolog.log" filePattern="${logDir}/infolog-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="${pattern}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="7" />
+		</RollingRandomAccessFile>
+	</Appenders>
+
+	<Loggers>
+		<logger name="org.springframework.*" level="${logLevel}" additivity="true"></logger>
+        
+		<Logger name="infolog" level="${logLevel}" additivity="false">
+			<AppenderRef ref="infolog" />
+		</Logger>
+		
+		<Logger name="default" level="${logLevel}" />
+		
+		<Root level="${logLevel}">
+			<AppenderRef ref="console" />
+			<AppenderRef ref="default" />
+		</Root>
+	</Loggers>
+
+</Configuration>
